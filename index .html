@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CG Rider Cabs - Book Ride</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      background: #ffcc00;
+      padding: 15px;
+      color: black;
+      margin: 0;
+      font-size: 24px;
+    }
+    form {
+      background: white;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background: #ffcc00;
+      color: black;
+      border: none;
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e6b800;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+    .links {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CG Rider Cabs — Book Ride</h1>
+
+  <form id="rideForm">
+    <label>Customer Name</label>
+    <input type="text" id="name" placeholder="Enter your name" required>
+
+    <label>Mobile Number</label>
+    <input type="number" id="mobile" placeholder="Enter mobile number" required>
+
+    <label>Pickup (address or coords)</label>
+    <input type="text" id="pickup" placeholder="Pickup location" required>
+
+    <label>Drop (address or coords)</label>
+    <input type="text" id="drop" placeholder="Drop location" required>
+
+    <label>Additional Notes (optional)</label>
+    <textarea id="notes" placeholder="Any notes..."></textarea>
+
+    <label>Payment</label>
+    <select id="payment">
+      <option value="Online">Online</option>
+      <option value="Cash">Cash</option>
+      <option value="CG Wallet">CG Rider Wallet</option>
+      <option value="UPI">UPI</option>
+    </select>
+
+    <button type="submit">Book Ride</button>
+    <p id="message" class="error"></p>
+  </form>
+
+  <div class="links">
+    <a href="#">View My Rides</a> | 
+    <a href="#">Driver Page</a>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrqcPs1x1Ffiux9NkKBJn7aMXmhDuXwjfq8QCpj83vglBbJASuMoLBZj8AmSDxpTQU/exec";
+
+    document.getElementById("rideForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById("name").value,
+        mobile: document.getElementById("mobile").value,
+        pickup: document.getElementById("pickup").value,
+        drop: document.getElementById("drop").value,
+        notes: document.getElementById("notes").value,
+        payment: document.getElementById("payment").value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: new URLSearchParams(data)
+      })
+      .then(res => res.text())
+      .then(text => {
+        document.getElementById("message").style.color = "green";
+        document.getElementById("message").innerText = "✅ Ride booked successfully!";
+        document.getElementById("rideForm").reset();
+      })
+      .catch(err => {
+        document.getElementById("message").innerText = "❌ Network error, try again!";
+      });
+    });
+  </script>
+
+</body>
+</html>
